@@ -4,7 +4,7 @@ import './Footer.css';
 function Footer() {
   return (
     <footer class="Footer">
-      yolo footer
+      Currently 3h29m drive from Portland
     </footer>
   );
 }

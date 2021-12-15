@@ -1,32 +1,21 @@
 import './App.css';
-import Header from './Header';
-import Main from './Main';
-import Footer from './Footer';
+import Header from './Header/Header';
+import Main from './Main/Main';
+import Footer from './Footer/Footer';
+
+import AWDB from './Services/awdb'
 
 function App() {
+  const hi = AWDB.getHourlyData(); 
+  const hi2 = 'hi'
+
   return (
     <div className="App">
       <Header/>
       <Main />
-      <Footer />
+      <Footer /> 
     </div>
   );
 }
 
 export default App;
-
-
-// import './App.css';
-// import Header from './Header'
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <Header />
-//       <main>yolo baby main</main>
-
-//     </div>
-//   );
-// }
-
-// export default App;
