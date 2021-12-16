@@ -44,7 +44,7 @@ function Header() {
         <div className="currently">
           <div>Currently: </div>
           <div>{current.temp}&deg;F</div>
-          <div>{current.winds}mph Winds</div>
+          <div>{current.winds}mph winds</div>
           <div>{current.summary}</div>
         </div>
         <div className="today">
@@ -60,8 +60,6 @@ function Header() {
           <div>{tomorrow.precipAccumulation}" {tomorrow.precipType}</div>
         </div>
       </div>
-      
-
     </header>
   );
 }
