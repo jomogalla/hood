@@ -3,19 +3,18 @@ import React, { useState, useEffect } from "react";
 import DarkSky from '../Services/darksky';
 
 function Header() {
-  const [temp, setTemp] = useState('**.*');
-  const [winds, setWinds] = useState('**.*');
-  const [summary, setSummary] = useState('******');
+  const [current, setCurrent] = useState({});
   const [today, setToday] = useState({});
   const [tomorrow, setTomorrow] = useState({});
 
   useEffect(()=>{
     DarkSky.getForecast().then((response) => {
-      const current = response.data.currently;
-
-      setTemp(current.temperature.toFixed(0));
-      setWinds(current.windSpeed);
-      setSummary(current.summary);
+      const currentStatus = response.data.currently;
+      setCurrent({
+        temp: currentStatus.temperature.toFixed(0),
+        winds: currentStatus.windSpeed,
+        summary: currentStatus.summary,
+      });
 
       const todaysForecast = response.data.daily.data[0];
       setToday({
@@ -44,9 +43,9 @@ function Header() {
       <div className="table">
         <div className="currently">
           <div>Currently: </div>
-          <div>{temp}&deg;F</div>
-          <div>{winds}mph Winds</div>
-          <div>{summary}</div>
+          <div>{current.temp}&deg;F</div>
+          <div>{current.winds}mph Winds</div>
+          <div>{current.summary}</div>
         </div>
         <div className="today">
           <div>Today:</div>
