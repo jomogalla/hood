@@ -6,8 +6,7 @@ import Footer from './Footer/Footer';
 import AWDB from './Services/awdb'
 
 function App() {
-  const hi = AWDB.getHourlyData(); 
-  const hi2 = 'hi'
+  AWDB.getHourlyData()
 
   return (
     <div className="App">

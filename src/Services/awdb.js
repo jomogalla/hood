@@ -6,7 +6,7 @@ function convertDateToAWDBFormat(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
-const awdb =  {
+const Awdb =  {
     getHourlyData: async function () {
         const path = 'getHourlyData'; //Man
 
@@ -24,4 +24,4 @@ const awdb =  {
     }
 }
 
-export default awdb;
+export default Awdb;

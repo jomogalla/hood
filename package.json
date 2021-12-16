@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@81c6116a5d579dd4/smooth-contours": "https://api.observablehq.com/@81c6116a5d579dd4/smooth-contours.tgz?v=3",
     "@observablehq/runtime": "^4.18.3",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

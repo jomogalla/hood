@@ -1,17 +1,27 @@
 
 import './Main.css';
 
-import {Runtime, Inspector} from "@observablehq/runtime";
-import define from "./notebook";
+import React, { useRef, useEffect } from "react";
+import { Runtime, Inspector } from "@observablehq/runtime";
+import notebook from "@81c6116a5d579dd4/smooth-contours";
 
 function Main() {
-  const runtime = new Runtime();
-  const main = runtime.module(define, Inspector.into(document.main));
+  const chartRef = useRef();
+
+  useEffect(() => {
+    const runtime = new Runtime();
+    runtime.module(notebook, name => {
+      if (name === "chart") return new Inspector(chartRef.current);
+    });
+
+    return () => runtime.dispose();
+  }, []);
+
 
   return (
-    <main class="Main">
-
-    </main>
+    <>
+      <main className="Main" ref={chartRef} />
+    </>
   );
 }
 
