@@ -25,7 +25,7 @@ ChartJS.register(
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function Footer() {
-  const [snowPack, setSnowPack] = useState(generateChartData([], []));
+  const [snowPack, setSnowPack] = useState(generateChartData([], [], [], [], [], []));
   
   const options = {
     responsive: true,
@@ -37,6 +37,9 @@ function Footer() {
         display: true,
         text: 'Snow Depth',
       },
+    },
+    interaction: {
+      intersect: true,
     },
     animation: {
       duration: 0,
@@ -81,7 +84,7 @@ function Footer() {
   const tan = `#AE9581`;
   const blue = '#C9DED5';
   const blue2 = '#69828C';
-  const blue3 = '#DE9681';
+  const blue3 = '#E2DFE6';
   const orange = '#DE9681';
 
   useEffect(()=>{
@@ -102,29 +105,34 @@ function Footer() {
       
 
       DarkSky.getForecast().then((response) => {
-
-
-        const daysToForecast = 7;
+        const daysToForecast = 8;
         let newForecast = values[values.length - 1].value;
+
+
+        // Get Today to overlap
+        const depths2 = [...depths];
+        depths2.pop();
+        const labels2 = [...labels];
+        labels2.pop();
+        const colors2 = [...colors];
+        colors2.pop();
 
         for(var i = 0; i < daysToForecast; i++) {
           const tempDay = response.data.daily.data[i];
 
           newForecast += tempDay.precipAccumulation;
-          depths.push(Math.floor(newForecast));
-          // console.log(tempDay)
+          depths2.push(Math.floor(newForecast));
 
           const tempDate = new Date();
-          // console.log(tempDay.time  1000)
           tempDate.setTime(tempDay.time * 1000);
-          labels.push(`${months[tempDate.getMonth()]} ${tempDate.getDate()}`);
+          labels2.push(`${months[tempDate.getMonth()]} ${tempDate.getDate()}`);
 
           // console.log(colors)
-          colors.push(blue2);
+          colors2.push(blue3);
         }
 
   
-        setSnowPack(generateChartData(depths, labels, colors));
+        setSnowPack(generateChartData(depths, labels, colors, depths2, labels2, colors2));
       });
 
       
@@ -141,15 +149,21 @@ function Footer() {
 
 export default Footer;
 
-function generateChartData(data, labels, colors) {
+function generateChartData(data, labels, colors, data2, labels2, colors2) {
   return {
-    labels: labels,
+    labels: labels2,
     datasets: [
       {
         labels: labels,
         barPercentage: 1.2,
         data: data,
         backgroundColor: colors,
+      },
+      {
+        labels: labels2,
+        barPercentage: 1.2,
+        data: data2,
+        backgroundColor: colors2,
       }
     ]
   };
