@@ -14,19 +14,20 @@
 }
 
 .table {
-  display: table;
+  /* display: table;
   width: calc(100% - 20px);
-  text-align: left;
+  text-align: left; */
 }
 
 .currently,
 .today,
 .tomorrow {
-  display: table-row;
+  display: flex;
+  justify-content: space-between;
 }
 
 .currently div,
 .today div,
 .tomorrow div {
-  display: table-cell;
+  /* display: table-cell; */
 }
