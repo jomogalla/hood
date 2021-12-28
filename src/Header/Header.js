@@ -6,6 +6,8 @@ function Header() {
   const [current, setCurrent] = useState({});
   const [today, setToday] = useState({});
   const [tomorrow, setTomorrow] = useState({});
+  const currentDate = new Date();
+  const headerDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
 
   useEffect(()=>{
     DarkSky.getForecast().then((response) => {
@@ -40,7 +42,11 @@ function Header() {
 
   return (
     <header className="Header">
-      <div className="table">
+      <h1>Hood</h1>
+      <h4>
+        {headerDate}
+      </h4>
+      {/* <div className="table">
         <div className="currently">
           <div>Currently: </div>
           <div>{current.temp}&deg;F</div>
@@ -59,7 +65,7 @@ function Header() {
           <div>{tomorrow.winds}mph winds</div>
           <div>{tomorrow.precipAccumulation}" {tomorrow.precipType}</div>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 }

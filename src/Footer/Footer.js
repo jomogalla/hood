@@ -38,8 +38,9 @@ function Footer() {
         text: 'Snow Depth',
       },
     },
+    aspectRatio: 1.25,
     interaction: {
-      intersect: true,
+      intersect: false,
     },
     animation: {
       duration: 0,
@@ -64,6 +65,7 @@ function Footer() {
         stacked: true,
       },
       y: {
+        display: true,
         ticks: {
           beginAtZero: false,
           // Include a dollar sign in the ticks
