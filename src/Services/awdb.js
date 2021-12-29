@@ -20,7 +20,7 @@ const Awdb =  {
             }
         });
     },
-    getData: async function () {
+    getData: async function (elementCd) {
         const path = 'getData';
 
         const today = new Date();
@@ -30,7 +30,7 @@ const Awdb =  {
             params: {
                 stationTriplets: '651:OR:SNTL',
                 ordinal: '1',
-                elementCd: 'SNWD',
+                elementCd: elementCd,
                 duration: 'DAILY',
                 beginDate: convertDateToAWDBFormat(daysAgo),
                 endDate: convertDateToAWDBFormat(today),

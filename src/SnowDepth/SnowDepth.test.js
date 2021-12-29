@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Header from './Header';
+import SnowDepth from './SnowDepth';
 
 test('renders learn react link', () => {
 
