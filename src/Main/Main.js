@@ -7,7 +7,7 @@ import SnowDepth from '../SnowDepth/SnowDepth';
 function Main() {
   return (
     <>
-      <main>
+      <main className='Main'>
         <SnowDepth />
       </main>
     </>

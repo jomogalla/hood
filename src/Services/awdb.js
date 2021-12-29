@@ -1,4 +1,5 @@
 import axios from 'axios';
+import constants from '../constants';
 
 const AWDB_JSON_ENDPOINT = 'https://hh45z6zeke.execute-api.us-west-2.amazonaws.com/Prod/';
 
@@ -7,14 +8,14 @@ const Awdb =  {
         const path = 'getHourlyData';
 
         const today = new Date();
-        const threeDaysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate()-3);
+        const daysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate()-3);
 
         return axios.get(`${AWDB_JSON_ENDPOINT}${path}`, {
             params: {
                 stationTriplets: '651:OR:SNTL',
                 ordinal: '1',
                 elementCd: 'SNWD',
-                beginDate: convertDateToAWDBFormat(threeDaysAgo),
+                beginDate: convertDateToAWDBFormat(daysAgo),
                 endDate: convertDateToAWDBFormat(today),
             }
         });
@@ -23,7 +24,7 @@ const Awdb =  {
         const path = 'getData';
 
         const today = new Date();
-        const threeDaysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate()-7);
+        const daysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1));
 
         const response = await axios.get(`${AWDB_JSON_ENDPOINT}${path}`, {
             params: {
@@ -31,7 +32,7 @@ const Awdb =  {
                 ordinal: '1',
                 elementCd: 'SNWD',
                 duration: 'DAILY',
-                beginDate: convertDateToAWDBFormat(threeDaysAgo),
+                beginDate: convertDateToAWDBFormat(daysAgo),
                 endDate: convertDateToAWDBFormat(today),
             }
         });
