@@ -24,31 +24,25 @@ ChartJS.register(
   Legend
 );
 
-function SnowDepth() {
+function SnowDepth(props) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Snow Depth', '"')
 
+  let { depth, forecast } = props;
+
   useEffect(async () => {
     let chartData = [];
 
-    // Get Snotel Snow Depth Data
-    let awdbData = await AWDB.getData('SNWD');
-    awdbData = awdbData[0].values; // this is gross
-
     // Transform AWDB Data to Values, Labels, & Colors
-    const values = awdbData.map(value => value.value);
-    const labels = awdbData.reduce((prev, value) => {
+    const values = depth.map(value => value.value);
+    const labels = depth.reduce((prev, value) => {
       prev.push(getFormattedDate(value.date));
       return prev;
     }, []);
-    const colors = awdbData.map(() => { return Constants.colors.grey });
+    const colors = depth.map(() => { return Constants.colors.grey });
 
-    // Get Weather Forecast
-    let darkSkyData = await DarkSky.getForecast();
-    darkSkyData = darkSkyData.data; // this is gross
-
-    let forecastSum = awdbData[awdbData.length - 1].value;
+    let forecastSum = depth[depth.length - 1].value;
 
     // Remove the values for today from our arrays
     values.pop();
@@ -60,7 +54,7 @@ function SnowDepth() {
 
     // Sum up all the forecasts and add them to the array
     for (let i = 0; i < Constants.daysToForecast; i++) {
-      const tempDay = darkSkyData.daily.data[i];
+      const tempDay = forecast.daily.data[i];
 
       forecastSum += tempDay.precipAccumulation;
       values.push(Math.floor(forecastSum));

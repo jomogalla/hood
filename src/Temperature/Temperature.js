@@ -24,29 +24,24 @@ ChartJS.register(
   Legend
 );
 
-function Temperature() {
+function Temperature(props) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Temperatures', '\xB0F')
 
+  let { tempMax, tempMin, forecast } = props;
+
   useEffect(async () => {
     let chartData = [];
 
-    // Get Snotel Snow Depth Data
-    let awdbDataMax = await AWDB.getData('TMAX');
-    awdbDataMax = awdbDataMax[0].values; // this is gross
-
-    let awdbDataMin = await AWDB.getData('TMIN');
-    awdbDataMin = awdbDataMin[0].values; // this is gross
-
     // Transform AWDB Data to Values, Labels, & Colors
     // const values = awdbData.map(value => [value.value, value.value]);
-    const values = awdbDataMax.map((value, index) => [awdbDataMin[index].value, value.value]); // this is gross
-    const labels = awdbDataMax.reduce((prev, value) => {
+    const values = tempMax.map((value, index) => [tempMin[index].value, value.value]); // this is gross
+    const labels = tempMax.reduce((prev, value) => {
       prev.push(getFormattedDate(value.date));
       return prev;
     }, []);
-    const colors = awdbDataMax.map((dataPoint) => { 
+    const colors = tempMax.map((dataPoint) => { 
       // console.log(dataPoint)
       if(dataPoint.value > 32) return Constants.colors.red;
  
@@ -59,8 +54,8 @@ function Temperature() {
     // colors.pop();
 
     // Get Weather Forecast
-    let darkSkyData = await DarkSky.getForecast();
-    darkSkyData = darkSkyData.data; // this is gross
+    // let darkSkyData = await DarkSky.getForecast();
+
 
 
 
@@ -68,10 +63,10 @@ function Temperature() {
     // Only what the forecast for the end of the day is + currentSnowLevel
 
     // Sum up all the forecasts and add them to the array
-    let forecastSum = awdbDataMax[awdbDataMax.length - 1].value;
+    let forecastSum = tempMax[tempMax.length - 1].value;
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
-      const tempDay = darkSkyData.daily.data[i];
+      const tempDay = forecast.daily.data[i];
 
       forecastSum += tempDay.precipAccumulation;
       const tempLow = tempDay.temperatureLow;

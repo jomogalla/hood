@@ -3,6 +3,8 @@ import constants from '../constants';
 
 const AWDB_JSON_ENDPOINT = 'https://hh45z6zeke.execute-api.us-west-2.amazonaws.com/Prod/';
 
+let cachedResponse = {};
+
 const Awdb =  {
     getHourlyData: async function () {
         const path = 'getHourlyData';
@@ -21,6 +23,10 @@ const Awdb =  {
         });
     },
     getData: async function (elementCd) {
+        if(cachedResponse[elementCd]) {
+            return cachedResponse[elementCd];
+        }
+
         const path = 'getData';
 
         const today = new Date();
@@ -61,6 +67,8 @@ const Awdb =  {
 
             transformedResponse.push(newItem)
         }
+
+        cachedResponse[elementCd] = transformedResponse;
 
         return transformedResponse;
     }
