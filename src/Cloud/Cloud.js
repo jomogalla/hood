@@ -1,7 +1,5 @@
-import './SnowDepth.css';
+import './Cloud.css';
 import React, { useEffect, useState } from "react";
-import AWDB from '../Services/awdb';
-import DarkSky from '../Services/darksky';
 import Constants from '../constants';
 import _ from "lodash";
 import {
@@ -24,30 +22,26 @@ ChartJS.register(
   Legend
 );
 
-function SnowDepth(props) {
+function Cloud(props) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Snow Depth', '"')
+  const options = generateOptions('Cloud Cover', '%')
 
-  let { depth, forecast } = props;
+  let { forecast } = props;
 
   useEffect(async () => {
     let chartData = [];
 
-    // Transform AWDB Data to Values, Labels, & Colors
-    const values = depth.map(value => value.value);
-    const labels = depth.reduce((prev, value) => {
-      prev.push(getFormattedDate(value.date));
-      return prev;
-    }, []);
-    const colors = depth.map(() => { return Constants.colors.grey });
+    const values = [];
+    const labels = [];
+    const colors = [];
 
-    let forecastSum = depth[depth.length - 1].value;
-
-    // Remove the values for today from our arrays
-    values.pop();
-    labels.pop();
-    colors.pop();
+    // Pre-populate data I can't get..... yet
+    for(let i = 0; i < Constants.daysToForecast - 1; i++) {
+      values.push([0, 0]);
+      labels.push('xxx ' + i);
+      colors.push(Constants.colors.white);
+    }
 
     // We are currently not showing todays snow level
     // Only what the forecast for the end of the day is + currentSnowLevel
@@ -56,10 +50,7 @@ function SnowDepth(props) {
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
-      let precipAccumulation = tempDay.precipAccumulation ? tempDay.precipAccumulation : 0;
-
-      forecastSum += precipAccumulation;
-      values.push(Math.floor(forecastSum));
+      values.push(tempDay.cloudCover * 100);
 
       const tempDate = new Date();
       tempDate.setTime(tempDay.time * 1000);
@@ -84,13 +75,13 @@ function SnowDepth(props) {
   }, []);
 
   return (
-    <section className="SnowDepth">
+    <section className="Wind">
       <Bar data={data} options={options}/>
     </section>
   );
 }
 
-export default SnowDepth;
+export default Cloud;
 
 function generateChartData(chartData) {
   if(!chartData.length) {
@@ -138,9 +129,8 @@ function generateOptions(title, yUnits) {
     },
     scales: {
       y: {
-        beginAtZero: false,
+        beginAtZero: true,
         ticks: {
-          // Include a dollar sign in the ticks
           callback: function(value, index, values) {
             if(!yUnits) {
               yUnits = '';

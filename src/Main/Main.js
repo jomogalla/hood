@@ -4,6 +4,8 @@ import './Main.css';
 import React, { useRef, useEffect, useState } from "react";
 import SnowDepth from '../SnowDepth/SnowDepth';
 import Temperature from '../Temperature/Temperature';
+import Wind from '../Wind/Wind';
+import Cloud from '../Cloud/Cloud';
 import Awdb from '../Services/awdb';
 import DarkSky from '../Services/darksky';
 
@@ -34,14 +36,28 @@ function Main() {
   return (
     <>
       <main className='Main'>
-        {loading 
+        {loading &&
+          <div className="loader">
+            <img src="/load.gif" />
+          </div>
+        }
+        {!loading &&
+          <div>
+            <SnowDepth forecast={forecast} depth={snowDepth}/>
+            <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
+            <Wind forecast={forecast}/>
+            <Cloud forecast={forecast}/>
+          </div>
+        }
+        {/* {loading 
           ? <div>LOADING</div>
           : <SnowDepth forecast={forecast} depth={snowDepth}/>
+          <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
         }
         {loading
           ? <div>LOADING</div>
           : <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
-        }
+        } */}
       </main>
     </>
   );
