@@ -53,10 +53,14 @@ function SnowDepth(props) {
     // Only what the forecast for the end of the day is + currentSnowLevel
 
     // Sum up all the forecasts and add them to the array
+    // console.log('ENTER DANGER ZONE')
+
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
       let precipAccumulation = tempDay.precipAccumulation ? tempDay.precipAccumulation : 0;
+
+      console.log(`forecastSum: ${forecastSum} | precipAccum: ${precipAccumulation}`)
 
       forecastSum += precipAccumulation;
       values.push(Math.floor(forecastSum));
@@ -69,6 +73,7 @@ function SnowDepth(props) {
       if (i !== 0) {
         colors.push(Constants.colors.blue3);
       } else {
+        
         colors.push(Constants.colors.orange)
       }
 

@@ -36,10 +36,16 @@ function Wind(props) {
     const labels = [];
     const colors = [];
 
+    const today = new Date();
+
     // Pre-populate data I can't get..... yet
     for(let i = 0; i < Constants.daysToForecast - 1; i++) {
       values.push([0, 0]);
-      labels.push('xxx ' + i);
+
+      const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (Constants.daysToForecast - 1 - i));;
+      const dayFormatted = getFormattedDate(day);
+
+      labels.push(dayFormatted);
       colors.push(Constants.colors.white);
     }
 

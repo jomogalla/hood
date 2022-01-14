@@ -15,18 +15,23 @@ function Main() {
   const [snowDepth, setSnowDepth] = useState([]);
   const [tempMax, setTempMax] = useState([]);
   const [tempMin, setTempMin] = useState([]);
+  const [message, setMessage] = useState('');
 
   useEffect(async () => {
+    setMessage('fetching snow depth');
     let awdbDataDepth = await Awdb.getData('SNWD');
     setSnowDepth(awdbDataDepth[0].values);
 
     // Get Snotel Snow Depth Data
+    setMessage('fetching temperature maximum');
     let awdbDataMax = await Awdb.getData('TMAX');
     setTempMax(awdbDataMax[0].values); // this is gross
 
+    setMessage('fetching temperature minimum');
     let awdbDataMin = await Awdb.getData('TMIN');
     setTempMin(awdbDataMin[0].values); // this is gross
 
+    setMessage('fetching forecast');
     let darkskyForecast = await DarkSky.getForecast();
     setForecast(darkskyForecast);
 
@@ -39,25 +44,20 @@ function Main() {
         {loading &&
           <div className="loader">
             <img src="/load.gif" />
+            <div class="message">
+              {message}
+            </div>
+            
           </div>
         }
         {!loading &&
-          <div>
+          <div className="charts">
             <SnowDepth forecast={forecast} depth={snowDepth}/>
             <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
             <Wind forecast={forecast}/>
             <Cloud forecast={forecast}/>
           </div>
         }
-        {/* {loading 
-          ? <div>LOADING</div>
-          : <SnowDepth forecast={forecast} depth={snowDepth}/>
-          <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
-        }
-        {loading
-          ? <div>LOADING</div>
-          : <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
-        } */}
       </main>
     </>
   );

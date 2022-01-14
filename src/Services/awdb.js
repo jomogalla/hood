@@ -47,7 +47,7 @@ const Awdb =  {
         
         for(const item of response.data) {
             const transformedItems = [];
-            const beginDate = new Date(item.beginDate);
+            const beginDate = new Date(fixDateForSafari(item.beginDate));
 
             for(let i = 0; i < item.values.length; i++) {
                 transformedItems.push({
@@ -78,4 +78,8 @@ export default Awdb;
 
 function convertDateToAWDBFormat(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+}
+
+function fixDateForSafari(date) {
+    return date.replaceAll('-', '/');
 }
