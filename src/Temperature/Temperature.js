@@ -35,34 +35,17 @@ function Temperature(props) {
     let chartData = [];
 
     // Transform AWDB Data to Values, Labels, & Colors
-    // const values = awdbData.map(value => [value.value, value.value]);
     const values = tempMax.map((value, index) => [tempMin[index].value, value.value]); // this is gross
     const labels = tempMax.reduce((prev, value) => {
       prev.push(getFormattedDate(value.date));
       return prev;
     }, []);
     const colors = tempMax.map((dataPoint) => { 
-      // console.log(dataPoint)
       if(dataPoint.value > 32) return Constants.colors.red;
  
       return Constants.colors.blue2;
     });
 
-    // Remove the values for today from our arrays
-    // values.pop();
-    // labels.pop();
-    // colors.pop();
-
-    // Get Weather Forecast
-    // let darkSkyData = await DarkSky.getForecast();
-
-
-
-
-    // We are currently not showing todays snow level
-    // Only what the forecast for the end of the day is + currentSnowLevel
-
-    // Sum up all the forecasts and add them to the array
     let forecastSum = tempMax[tempMax.length - 1].value;
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
@@ -72,8 +55,6 @@ function Temperature(props) {
       const tempLow = tempDay.temperatureLow;
       const tempHigh = tempDay.temperatureHigh;
 
-      // values.push
-      
       values.push([tempLow, tempHigh]);
 
       const tempDate = new Date();
@@ -126,7 +107,6 @@ function generateChartData(chartData) {
         barPercentage: 1.2,
         data: value.values,
         backgroundColor: value.colors,
-        // borderWidth: 2,
         borderRadius: 50,
         borderSkipped: false,
 

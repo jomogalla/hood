@@ -27,7 +27,7 @@ function Cloud(props) {
 
   const options = generateOptions('Cloud Cover', '%')
 
-  let { forecast } = props;
+  let { forecast, past } = props;
 
   useEffect(async () => {
     let chartData = [];
@@ -38,21 +38,22 @@ function Cloud(props) {
 
     const today = new Date();
 
-    // Pre-populate data I can't get..... yet
-    for(let i = 0; i < Constants.daysToForecast - 1; i++) {
-      values.push(0);
+    for(let i = 0; i < past.length; i++) {
+      const tempDay = past[i].daily.data[0];
+
+      values.push(tempDay.cloudCover * 100);
+
+
+      const tempDate = new Date();
+      tempDate.setTime(tempDay.time * 1000);
+      labels.push(getFormattedDate(tempDate));
 
       const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (Constants.daysToForecast - 1 - i));;
       const dayFormatted = getFormattedDate(day);
 
-      labels.push(dayFormatted);
-      colors.push(Constants.colors.white);
+      colors.push(Constants.colors.blue3);
     }
 
-    // We are currently not showing todays snow level
-    // Only what the forecast for the end of the day is + currentSnowLevel
-
-    // Sum up all the forecasts and add them to the array
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 

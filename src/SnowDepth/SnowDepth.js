@@ -60,8 +60,6 @@ function SnowDepth(props) {
 
       let precipAccumulation = tempDay.precipAccumulation ? tempDay.precipAccumulation : 0;
 
-      console.log(`forecastSum: ${forecastSum} | precipAccum: ${precipAccumulation}`)
-
       forecastSum += precipAccumulation;
       values.push(Math.floor(forecastSum));
 

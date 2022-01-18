@@ -27,7 +27,7 @@ function Wind(props) {
 
   const options = generateOptions('Wind', 'mph')
 
-  let { forecast } = props;
+  let { forecast, past } = props;
 
   useEffect(async () => {
     let chartData = [];
@@ -38,21 +38,21 @@ function Wind(props) {
 
     const today = new Date();
 
-    // Pre-populate data I can't get..... yet
-    for(let i = 0; i < Constants.daysToForecast - 1; i++) {
-      values.push([0, 0]);
+    for(let i = 0; i < past.length; i++) {
+      const tempDay = past[i].daily.data[0];
+
+      values.push([tempDay.windSpeed, tempDay.windGust]);
+
+      const tempDate = new Date();
+      tempDate.setTime(tempDay.time * 1000);
+      labels.push(getFormattedDate(tempDate));
 
       const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (Constants.daysToForecast - 1 - i));;
       const dayFormatted = getFormattedDate(day);
 
-      labels.push(dayFormatted);
-      colors.push(Constants.colors.white);
+      colors.push(Constants.colors.blue2);
     }
 
-    // We are currently not showing todays snow level
-    // Only what the forecast for the end of the day is + currentSnowLevel
-
-    // Sum up all the forecasts and add them to the array
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
@@ -106,6 +106,8 @@ function generateChartData(chartData) {
         barPercentage: 1.2,
         data: value.values,
         backgroundColor: value.colors,
+        borderRadius: 50,
+        borderSkipped: false,
       };
     }),
   };
@@ -130,6 +132,7 @@ function generateOptions(title, yUnits) {
       },
     },
     aspectRatio: 1.25,
+    borderRadius: 50,
     animation: {
       duration: 200,
     },

@@ -8,6 +8,7 @@ import Wind from '../Wind/Wind';
 import Cloud from '../Cloud/Cloud';
 import Awdb from '../Services/awdb';
 import DarkSky from '../Services/darksky';
+import constants from '../constants';
 
 function Main() {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,7 @@ function Main() {
   const [tempMax, setTempMax] = useState([]);
   const [tempMin, setTempMin] = useState([]);
   const [message, setMessage] = useState('');
+  const [past, setPast] = useState([]);
 
   useEffect(async () => {
     setMessage('fetching snow depth');
@@ -35,6 +37,20 @@ function Main() {
     let darkskyForecast = await DarkSky.getForecast();
     setForecast(darkskyForecast);
 
+    setMessage('fetching past');
+
+    const tempPast = [];
+    const today = new Date();
+    for(let i = 0; i < constants.daysToForecast - 1; i++) {
+      const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1 - i));
+
+      let darkskyForecast = await DarkSky.getPast(day);
+
+      tempPast.push(darkskyForecast);
+    }
+    setPast(tempPast);
+
+
     setLoading(false);
   }, []);
 
@@ -44,7 +60,7 @@ function Main() {
         {loading &&
           <div className="loader">
             <img src="/load.gif" />
-            <div class="message">
+            <div className="message">
               {message}
             </div>
             
@@ -54,8 +70,8 @@ function Main() {
           <div className="charts">
             <SnowDepth forecast={forecast} depth={snowDepth}/>
             <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
-            <Wind forecast={forecast}/>
-            <Cloud forecast={forecast}/>
+            <Wind forecast={forecast} past={past}/>
+            <Cloud forecast={forecast} past={past}/>
           </div>
         }
       </main>
