@@ -47,11 +47,13 @@ function Main() {
       for(let i = 0; i < constants.daysToForecast - 1; i++) {
         const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1 - i));
 
-        let darkskyForecast = await DarkSky.getPast(day);
+        let darkskyForecast = DarkSky.getPast(day);
 
         tempPast.push(darkskyForecast);
       }
-      setPast(tempPast);
+
+      const pasts = await Promise.all(tempPast);
+      setPast(pasts);
 
       setLoading(false);
     };
