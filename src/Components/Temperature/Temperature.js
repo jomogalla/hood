@@ -22,12 +22,10 @@ ChartJS.register(
   Legend
 );
 
-function Temperature(props) {
+function Temperature({ tempMax, tempMin, forecast, centerDate }) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Temperatures', '\xB0F')
-
-  let { tempMax, tempMin, forecast } = props;
 
   useEffect(() => {
     let chartData = [];
@@ -52,7 +50,7 @@ function Temperature(props) {
 
       values.push([tempLow, tempHigh]);
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -74,7 +72,7 @@ function Temperature(props) {
     });
 
     setData(generateChartData(chartData));
-  }, [tempMax, tempMin, forecast]);
+  }, [tempMax, tempMin, forecast, centerDate]);
 
   return (
     <section className="Temperature">

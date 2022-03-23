@@ -22,12 +22,10 @@ ChartJS.register(
   Legend
 );
 
-function Wind(props) {
+function Wind({ forecast, past, centerDate}) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Wind', 'mph')
-
-  let { forecast, past } = props;
 
   useEffect(() => {
     let chartData = [];
@@ -41,7 +39,7 @@ function Wind(props) {
 
       values.push([tempDay.windSpeed, tempDay.windGust]);
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -53,7 +51,7 @@ function Wind(props) {
 
       values.push([tempDay.windSpeed, tempDay.windGust]);
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -73,7 +71,7 @@ function Wind(props) {
     });
 
     setData(generateChartData(chartData));
-  }, [forecast, past]);
+  }, [forecast, past, centerDate]);
 
   return (
     <section className="Wind">

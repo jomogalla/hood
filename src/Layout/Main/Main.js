@@ -19,6 +19,8 @@ function Main() {
   const [message, setMessage] = useState('');
   const [past, setPast] = useState([]);
 
+  const centerDate = new Date();
+
   useEffect(() => {
     fetchAndSetData();
 
@@ -73,10 +75,10 @@ function Main() {
         }
         {!loading &&
           <div className="charts">
-            <SnowDepth forecast={forecast} depth={snowDepth}/>
-            <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
-            <Wind forecast={forecast} past={past}/>
-            <Cloud forecast={forecast} past={past}/>
+            <SnowDepth forecast={forecast} depth={snowDepth} centerDate={centerDate}/>
+            <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin} centerDate={centerDate}/>
+            <Wind forecast={forecast} past={past} centerDate={centerDate}/>
+            <Cloud forecast={forecast} past={past} centerDate={centerDate}/>
           </div>
         }
       </main>

@@ -22,12 +22,10 @@ ChartJS.register(
   Legend
 );
 
-function SnowDepth(props) {
+function SnowDepth({ depth, forecast, centerDate}) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Snow Depth', '"')
-
-  let { depth, forecast } = props;
 
   useEffect(() => {
     let chartData = [];
@@ -61,7 +59,7 @@ function SnowDepth(props) {
       forecastSum += precipAccumulation;
       values.push(Math.floor(forecastSum));
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -69,7 +67,6 @@ function SnowDepth(props) {
       if (i !== 0) {
         colors.push(Constants.colors.blue3);
       } else {
-        
         colors.push(Constants.colors.orange)
       }
 
@@ -82,7 +79,7 @@ function SnowDepth(props) {
     });
 
     setData(generateChartData(chartData));
-  }, [depth, forecast]);
+  }, [depth, forecast, centerDate]);
 
   return (
     <section className="SnowDepth">

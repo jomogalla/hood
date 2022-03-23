@@ -22,12 +22,10 @@ ChartJS.register(
   Legend
 );
 
-function Cloud(props) {
+function Cloud({ forecast, past, centerDate }) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Cloud Cover', '%')
-
-  let { forecast, past } = props;
+  const options = generateOptions('Cloud Cover', '%');
 
   useEffect(() => {
     let chartData = [];
@@ -42,7 +40,7 @@ function Cloud(props) {
       values.push(tempDay.cloudCover * 100);
 
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -54,7 +52,7 @@ function Cloud(props) {
 
       values.push(tempDay.cloudCover * 100);
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -64,7 +62,6 @@ function Cloud(props) {
       } else {
         colors.push(Constants.colors.orange)
       }
-
     }
 
     chartData.push({
@@ -74,7 +71,7 @@ function Cloud(props) {
     });
 
     setData(generateChartData(chartData));
-  }, [forecast, past]);
+  }, [forecast, past, centerDate]);
 
   return (
     <section className="Wind">

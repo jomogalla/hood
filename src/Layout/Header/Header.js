@@ -13,9 +13,9 @@ function Header() {
   return (
     <header className="Header">
       <h1>Hood</h1>
-      <h4>
+      <h2>
         {beginDateFormatted} - {endDateFormatted}
-      </h4>
+      </h2>
     </header>
   );
 }
