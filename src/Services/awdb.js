@@ -19,10 +19,6 @@ const Awdb =  {
             endDate: convertDateToAWDBFormat(today),
         };
 
-        // return fetch(``, {
-        //     body
-        // });
-
         const response = await fetch(`${AWDB_JSON_ENDPOINT}${path}?${new URLSearchParams(params)}`);
         const snowData = await response.json();
 

@@ -1,7 +1,5 @@
 import './SnowDepth.css';
 import React, { useEffect, useState } from "react";
-import AWDB from '../Services/awdb';
-import DarkSky from '../Services/darksky';
 import Constants from '../constants';
 import _ from "lodash";
 import {
@@ -31,7 +29,7 @@ function SnowDepth(props) {
 
   let { depth, forecast } = props;
 
-  useEffect(async () => {
+  useEffect(() => {
     let chartData = [];
 
     // Transform AWDB Data to Values, Labels, & Colors
@@ -84,7 +82,7 @@ function SnowDepth(props) {
     });
 
     setData(generateChartData(chartData));
-  }, []);
+  }, [depth, forecast]);
 
   return (
     <section className="SnowDepth">

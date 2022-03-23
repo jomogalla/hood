@@ -29,14 +29,12 @@ function Cloud(props) {
 
   let { forecast, past } = props;
 
-  useEffect(async () => {
+  useEffect(() => {
     let chartData = [];
 
     const values = [];
     const labels = [];
     const colors = [];
-
-    const today = new Date();
 
     for(let i = 0; i < past.length; i++) {
       const tempDay = past[i].daily.data[0];
@@ -47,9 +45,6 @@ function Cloud(props) {
       const tempDate = new Date();
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
-
-      const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (Constants.daysToForecast - 1 - i));;
-      const dayFormatted = getFormattedDate(day);
 
       colors.push(Constants.colors.blue3);
     }
@@ -79,7 +74,7 @@ function Cloud(props) {
     });
 
     setData(generateChartData(chartData));
-  }, []);
+  }, [forecast, past]);
 
   return (
     <section className="Wind">

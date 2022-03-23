@@ -6,13 +6,9 @@ function Header() {
   const today = new Date();
   const beginDate =  new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1));
   const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (constants.daysToForecast - 1));;
-  const headerDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
 
   const beginDateFormatted = formatDate(beginDate);
   const endDateFormatted = formatDate(endDate);
-
-
-
 
   return (
     <header className="Header">
