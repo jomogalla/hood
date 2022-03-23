@@ -1,6 +1,6 @@
-import './Temperature.css';
+import './SnowDepth.css';
 import React, { useEffect, useState } from "react";
-import Constants from '../constants';
+import Constants from '../../constants';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -22,47 +22,55 @@ ChartJS.register(
   Legend
 );
 
-function Temperature(props) {
+function SnowDepth(props) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Temperatures', '\xB0F')
+  const options = generateOptions('Snow Depth', '"')
 
-  let { tempMax, tempMin, forecast } = props;
+  let { depth, forecast } = props;
 
   useEffect(() => {
     let chartData = [];
 
     // Transform AWDB Data to Values, Labels, & Colors
-    const values = tempMax.map((value, index) => [tempMin[index].value, value.value]); // this is gross
-    const labels = tempMax.reduce((prev, value) => {
+    const values = depth.map(value => value.value);
+    const labels = depth.reduce((prev, value) => {
       prev.push(getFormattedDate(value.date));
       return prev;
     }, []);
-    const colors = tempMax.map((dataPoint) => { 
-      if(dataPoint.value > 32) return Constants.colors.red;
- 
-      return Constants.colors.blue2;
-    });
+    const colors = depth.map(() => { return Constants.colors.grey });
+
+    let forecastSum = depth[depth.length - 1].value;
+
+    // Remove the values for today from our arrays
+    values.pop();
+    labels.pop();
+    colors.pop();
+
+    // We are currently not showing todays snow level
+    // Only what the forecast for the end of the day is + currentSnowLevel
+
+    // Sum up all the forecasts and add them to the array
+    // console.log('ENTER DANGER ZONE')
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
-      const tempLow = tempDay.temperatureLow;
-      const tempHigh = tempDay.temperatureHigh;
+      let precipAccumulation = tempDay.precipAccumulation ? tempDay.precipAccumulation : 0;
 
-      values.push([tempLow, tempHigh]);
+      forecastSum += precipAccumulation;
+      values.push(Math.floor(forecastSum));
 
       const tempDate = new Date();
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
       // Make today orange
-      if (i === 0) {
-        colors.push(Constants.colors.orange);
-      } else if (tempHigh > 32) {
-        colors.push(Constants.colors.red);
+      if (i !== 0) {
+        colors.push(Constants.colors.blue3);
       } else {
-        colors.push(Constants.colors.blue3)
+        
+        colors.push(Constants.colors.orange)
       }
 
     }
@@ -74,16 +82,16 @@ function Temperature(props) {
     });
 
     setData(generateChartData(chartData));
-  }, [tempMax, tempMin, forecast]);
+  }, [depth, forecast]);
 
   return (
-    <section className="Temperature">
+    <section className="SnowDepth">
       <Bar data={data} options={options}/>
     </section>
   );
 }
 
-export default Temperature;
+export default SnowDepth;
 
 function generateChartData(chartData) {
   if(!chartData.length) {
@@ -102,9 +110,6 @@ function generateChartData(chartData) {
         barPercentage: 1.2,
         data: value.values,
         backgroundColor: value.colors,
-        borderRadius: 50,
-        borderSkipped: false,
-
       };
     }),
   };
@@ -128,7 +133,6 @@ function generateOptions(title, yUnits) {
         text: title,
       },
     },
-    borderRadius: 50,
     aspectRatio: 1.25,
     animation: {
       duration: 200,
@@ -144,16 +148,6 @@ function generateOptions(title, yUnits) {
             }
 
             return  `${value}${yUnits}`;
-          },
-        },
-        grid: {
-          drawBorder: true,
-          color: function(context) {
-            if (context.tick.value > 32) {
-              return Constants.colors.orange;
-            } 
-
-            return Constants.colors.grey;
           },
         },
       },

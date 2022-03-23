@@ -2,13 +2,13 @@
 import './Main.css';
 
 import React, { useEffect, useState } from "react";
-import SnowDepth from '../SnowDepth/SnowDepth';
-import Temperature from '../Temperature/Temperature';
-import Wind from '../Wind/Wind';
-import Cloud from '../Cloud/Cloud';
-import Awdb from '../Services/awdb';
-import DarkSky from '../Services/darksky';
-import constants from '../constants';
+import SnowDepth from '../../Components/SnowDepth/SnowDepth';
+import Temperature from '../../Components/Temperature/Temperature';
+import Wind from '../../Components/Wind/Wind';
+import Cloud from '../../Components/Cloud/Cloud';
+import Awdb from '../../Services/awdb';
+import DarkSky from '../../Services/darksky';
+import constants from '../../constants';
 
 function Main() {
   const [loading, setLoading] = useState(true);

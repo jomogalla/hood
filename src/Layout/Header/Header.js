@@ -1,5 +1,5 @@
 import './Header.css';
-import constants from '../constants';
+import constants from '../../constants';
 import React from "react";
 
 function Header() {

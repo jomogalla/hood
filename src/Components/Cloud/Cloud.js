@@ -1,6 +1,6 @@
 import './Cloud.css';
 import React, { useEffect, useState } from "react";
-import Constants from '../constants';
+import Constants from '../../constants';
 import _ from "lodash";
 import {
   Chart as ChartJS,

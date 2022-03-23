@@ -1,6 +1,6 @@
-import './SnowDepth.css';
+import './Wind.css';
 import React, { useEffect, useState } from "react";
-import Constants from '../constants';
+import Constants from '../../constants';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -22,44 +22,36 @@ ChartJS.register(
   Legend
 );
 
-function SnowDepth(props) {
+function Wind(props) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Snow Depth', '"')
+  const options = generateOptions('Wind', 'mph')
 
-  let { depth, forecast } = props;
+  let { forecast, past } = props;
 
   useEffect(() => {
     let chartData = [];
 
-    // Transform AWDB Data to Values, Labels, & Colors
-    const values = depth.map(value => value.value);
-    const labels = depth.reduce((prev, value) => {
-      prev.push(getFormattedDate(value.date));
-      return prev;
-    }, []);
-    const colors = depth.map(() => { return Constants.colors.grey });
+    const values = [];
+    const labels = [];
+    const colors = [];
 
-    let forecastSum = depth[depth.length - 1].value;
+    for(let i = 0; i < past.length; i++) {
+      const tempDay = past[i].daily.data[0];
 
-    // Remove the values for today from our arrays
-    values.pop();
-    labels.pop();
-    colors.pop();
+      values.push([tempDay.windSpeed, tempDay.windGust]);
 
-    // We are currently not showing todays snow level
-    // Only what the forecast for the end of the day is + currentSnowLevel
+      const tempDate = new Date();
+      tempDate.setTime(tempDay.time * 1000);
+      labels.push(getFormattedDate(tempDate));
 
-    // Sum up all the forecasts and add them to the array
-    // console.log('ENTER DANGER ZONE')
+      colors.push(Constants.colors.blue2);
+    }
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
-      let precipAccumulation = tempDay.precipAccumulation ? tempDay.precipAccumulation : 0;
-
-      forecastSum += precipAccumulation;
-      values.push(Math.floor(forecastSum));
+      values.push([tempDay.windSpeed, tempDay.windGust]);
 
       const tempDate = new Date();
       tempDate.setTime(tempDay.time * 1000);
@@ -69,7 +61,6 @@ function SnowDepth(props) {
       if (i !== 0) {
         colors.push(Constants.colors.blue3);
       } else {
-        
         colors.push(Constants.colors.orange)
       }
 
@@ -82,16 +73,16 @@ function SnowDepth(props) {
     });
 
     setData(generateChartData(chartData));
-  }, [depth, forecast]);
+  }, [forecast, past]);
 
   return (
-    <section className="SnowDepth">
+    <section className="Wind">
       <Bar data={data} options={options}/>
     </section>
   );
 }
 
-export default SnowDepth;
+export default Wind;
 
 function generateChartData(chartData) {
   if(!chartData.length) {
@@ -110,6 +101,8 @@ function generateChartData(chartData) {
         barPercentage: 1.2,
         data: value.values,
         backgroundColor: value.colors,
+        borderRadius: 50,
+        borderSkipped: false,
       };
     }),
   };
@@ -134,14 +127,14 @@ function generateOptions(title, yUnits) {
       },
     },
     aspectRatio: 1.25,
+    borderRadius: 50,
     animation: {
       duration: 200,
     },
     scales: {
       y: {
-        beginAtZero: false,
+        beginAtZero: true,
         ticks: {
-          // Include a dollar sign in the ticks
           callback: function(value, index, values) {
             if(!yUnits) {
               yUnits = '';
