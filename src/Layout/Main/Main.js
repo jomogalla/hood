@@ -45,7 +45,7 @@ function Main() {
       setMessage('fetching past');
 
       const tempPast = [];
-      const today = new Date();
+      const today = new Date(centerDate);
       for(let i = 0; i < constants.daysToForecast - 1; i++) {
         const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1 - i));
 
