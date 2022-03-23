@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = null;
 
 const GOOGLE_DIRECTIONS_ENDPOINT = 'https://maps.googleapis.com/maps/api/directions/json';
 

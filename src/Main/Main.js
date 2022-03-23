@@ -1,7 +1,7 @@
 
 import './Main.css';
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SnowDepth from '../SnowDepth/SnowDepth';
 import Temperature from '../Temperature/Temperature';
 import Wind from '../Wind/Wind';
@@ -19,39 +19,42 @@ function Main() {
   const [message, setMessage] = useState('');
   const [past, setPast] = useState([]);
 
-  useEffect(async () => {
-    setMessage('fetching snow depth');
-    let awdbDataDepth = await Awdb.getData('SNWD');
-    setSnowDepth(awdbDataDepth[0].values);
+  useEffect(() => {
+    fetchAndSetData();
 
-    // Get Snotel Snow Depth Data
-    setMessage('fetching temperature maximum');
-    let awdbDataMax = await Awdb.getData('TMAX');
-    setTempMax(awdbDataMax[0].values); // this is gross
+    async function fetchAndSetData() {
+      setMessage('fetching snow depth');
+      let awdbDataDepth = await Awdb.getData('SNWD');
+      setSnowDepth(awdbDataDepth[0].values);
 
-    setMessage('fetching temperature minimum');
-    let awdbDataMin = await Awdb.getData('TMIN');
-    setTempMin(awdbDataMin[0].values); // this is gross
+      // Get Snotel Snow Depth Data
+      setMessage('fetching temperature maximum');
+      let awdbDataMax = await Awdb.getData('TMAX');
+      setTempMax(awdbDataMax[0].values); // this is gross
 
-    setMessage('fetching forecast');
-    let darkskyForecast = await DarkSky.getForecast();
-    setForecast(darkskyForecast);
+      setMessage('fetching temperature minimum');
+      let awdbDataMin = await Awdb.getData('TMIN');
+      setTempMin(awdbDataMin[0].values); // this is gross
 
-    setMessage('fetching past');
+      setMessage('fetching forecast');
+      let darkskyForecast = await DarkSky.getForecast();
+      setForecast(darkskyForecast);
 
-    const tempPast = [];
-    const today = new Date();
-    for(let i = 0; i < constants.daysToForecast - 1; i++) {
-      const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1 - i));
+      setMessage('fetching past');
 
-      let darkskyForecast = await DarkSky.getPast(day);
+      const tempPast = [];
+      const today = new Date();
+      for(let i = 0; i < constants.daysToForecast - 1; i++) {
+        const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1 - i));
 
-      tempPast.push(darkskyForecast);
-    }
-    setPast(tempPast);
+        let darkskyForecast = await DarkSky.getPast(day);
 
+        tempPast.push(darkskyForecast);
+      }
+      setPast(tempPast);
 
-    setLoading(false);
+      setLoading(false);
+    };
   }, []);
 
   return (
@@ -59,7 +62,7 @@ function Main() {
       <main className='Main'>
         {loading &&
           <div className="loader">
-            <img src="/load.gif" />
+            <img src="/load.gif" alt="loading"/>
             <div className="message">
               {message}
             </div>

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import constants from '../constants';
 
 const AWDB_JSON_ENDPOINT = 'https://hh45z6zeke.execute-api.us-west-2.amazonaws.com/Prod/';
@@ -12,15 +11,22 @@ const Awdb =  {
         const today = new Date();
         const daysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate()-3);
 
-        return axios.get(`${AWDB_JSON_ENDPOINT}${path}`, {
-            params: {
-                stationTriplets: '651:OR:SNTL',
-                ordinal: '1',
-                elementCd: 'SNWD',
-                beginDate: convertDateToAWDBFormat(daysAgo),
-                endDate: convertDateToAWDBFormat(today),
-            }
-        });
+        const params = {
+            stationTriplets: '651:OR:SNTL',
+            ordinal: '1',
+            elementCd: 'SNWD',
+            beginDate: convertDateToAWDBFormat(daysAgo),
+            endDate: convertDateToAWDBFormat(today),
+        };
+
+        // return fetch(``, {
+        //     body
+        // });
+
+        const response = await fetch(`${AWDB_JSON_ENDPOINT}${path}?${new URLSearchParams(params)}`);
+        const snowData = await response.json();
+
+        return snowData;
     },
     getData: async function (elementCd) {
         if(cachedResponse[elementCd]) {
@@ -32,20 +38,23 @@ const Awdb =  {
         const today = new Date();
         const daysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1));
 
-        const response = await axios.get(`${AWDB_JSON_ENDPOINT}${path}`, {
-            params: {
-                stationTriplets: '651:OR:SNTL',
-                ordinal: '1',
-                elementCd: elementCd,
-                duration: 'DAILY',
-                beginDate: convertDateToAWDBFormat(daysAgo),
-                endDate: convertDateToAWDBFormat(today),
-            }
-        });
+        const params = {
+            stationTriplets: '651:OR:SNTL',
+            ordinal: '1',
+            elementCd: elementCd,
+            duration: 'DAILY',
+            beginDate: convertDateToAWDBFormat(daysAgo),
+            endDate: convertDateToAWDBFormat(today),
+        };
 
+        const response = await fetch(`${AWDB_JSON_ENDPOINT}${path}?${new URLSearchParams(params)}`);
+        const snowData = await response.json();
+ 
+        // HANDLE BAD REQUEST
+        
         const transformedResponse = [];
         
-        for(const item of response.data) {
+        for(const item of snowData) {
             const transformedItems = [];
             const beginDate = new Date(fixDateForSafari(item.beginDate));
 
