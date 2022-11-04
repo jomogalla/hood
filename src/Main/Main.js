@@ -23,17 +23,36 @@ function Main() {
     fetchAndSetData();
 
     async function fetchAndSetData() {
+      const today = new Date();
+      const daysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1));
+
       setMessage('fetching snow depth');
-      let awdbDataDepth = await Awdb.getData('SNWD');
+      let awdbDataDepth = await Awdb.getData({
+        stationTriplets: '651:OR:SNTL',
+        elementCd: 'SNWD',
+        startDate: daysAgo,
+        endDate: today,
+      });
       setSnowDepth(awdbDataDepth[0].values);
 
       // Get Snotel Snow Depth Data
       setMessage('fetching temperature maximum');
-      let awdbDataMax = await Awdb.getData('TMAX');
+      let awdbDataMax = await Awdb.getData({
+        stationTriplets: '651:OR:SNTL',
+        elementCd: 'TMAX',
+        startDate: daysAgo,
+        endDate: today,
+      });
       setTempMax(awdbDataMax[0].values); // this is gross
 
       setMessage('fetching temperature minimum');
-      let awdbDataMin = await Awdb.getData('TMIN');
+      let awdbDataMin = await Awdb.getData({
+        stationTriplets: '651:OR:SNTL',
+        elementCd: 'TMIN',
+        startDate: daysAgo,
+        endDate: today,
+      });
+      console.log(awdbDataMin)
       setTempMin(awdbDataMin[0].values); // this is gross
 
       setMessage('fetching forecast');
@@ -43,7 +62,8 @@ function Main() {
       setMessage('fetching past');
 
       const tempPast = [];
-      const today = new Date();
+
+      // Get Darksky Past data day by day
       for(let i = 0; i < constants.daysToForecast - 1; i++) {
         const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1 - i));
 
