@@ -31,6 +31,18 @@ const Awdb =  {
         cachedResponse[elementCd] = transformedResponse;
 
         return transformedResponse;
+    },
+    getStationMetadata: async function ({ stationTriplet }) {
+        const path = 'getStationMetadata';
+
+        const params = {
+            stationTriplet,
+        };
+
+        const response = await fetch(`${AWDB_JSON_ENDPOINT}${path}?${new URLSearchParams(params)}`);
+        const stationData = await response.json();
+
+        return stationData;
     }
 }
 
