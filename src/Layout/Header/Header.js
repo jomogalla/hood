@@ -1,6 +1,6 @@
 import './Header.css';
-import constants from '../constants';
-import { stations } from '../stations';
+import constants from '../../constants';
+import { stations } from '../../stations';
 import React from "react";
 
 function Header({
@@ -31,7 +31,7 @@ function Header({
       </h1>
       <h4>
         {beginDateFormatted} - {endDateFormatted}
-      </h2>
+      </h4>
     </header>
   );
 }
