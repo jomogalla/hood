@@ -2,14 +2,14 @@
 import './Main.css';
 
 import React, { useEffect, useState } from "react";
-import SnowDepth from '../SnowDepth/SnowDepth';
-import Temperature from '../Temperature/Temperature';
-import Wind from '../Wind/Wind';
-import Cloud from '../Cloud/Cloud';
-import Station from '../Station/Station';
-import Awdb from '../Services/awdb';
-import DarkSky from '../Services/darksky';
-import constants from '../constants';
+import SnowDepth from '../../Components/SnowDepth/SnowDepth';
+import Temperature from '../../Components/Temperature/Temperature';
+import Wind from '../../Components/Wind/Wind';
+import Cloud from '../../Components/Cloud/Cloud';
+import Station from '../../Components/Station/Station';
+import Awdb from '../../Services/awdb';
+import DarkSky from '../../Services/darksky';
+import constants from '../../constants';
 
 function Main({
   selectedStation,
@@ -23,14 +23,9 @@ function Main({
   const [message, setMessage] = useState('');
   const [past, setPast] = useState([]);
 
-  useEffect(async () => {
-    if(selectedStation) {
-      setLoading(true);
-      await fetchAndSetData();
-      setLoading(false);
-    }
-    
+  useEffect(() => {
     async function fetchAndSetData() {
+      setLoading(true);
       const today = new Date();
       const daysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (constants.daysToForecast - 1));
 
@@ -93,7 +88,12 @@ function Main({
         tempPast.push(darkskyForecast);
       }
       setPast(tempPast);
+      setLoading(false);
     };
+
+    if(selectedStation) {
+      fetchAndSetData();
+    }
   }, [selectedStation]);
 
   return (

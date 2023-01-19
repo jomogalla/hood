@@ -1,8 +1,8 @@
 import './App.css';
 import { useState } from 'react';
-import Header from './Header/Header';
-import Main from './Main/Main';
-import Footer from './Footer/Footer';
+import Header from './Layout/Header/Header';
+import Main from './Layout/Main/Main';
+import Footer from './Layout/Footer/Footer';
 
 import { getDefaultStation } from './stations';
 
