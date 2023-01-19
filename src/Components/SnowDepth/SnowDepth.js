@@ -1,8 +1,6 @@
 import './SnowDepth.css';
 import React, { useEffect, useState } from "react";
-import AWDB from '../Services/awdb';
-import DarkSky from '../Services/darksky';
-import Constants from '../constants';
+import Constants from '../../constants';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -24,14 +22,12 @@ ChartJS.register(
   Legend
 );
 
-function SnowDepth(props) {
+function SnowDepth({ depth, forecast, centerDate}) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Snow Depth', '"')
 
-  let { depth, forecast } = props;
-
-  useEffect(async () => {
+  useEffect(() => {
     let chartData = [];
 
     // Transform AWDB Data to Values, Labels, & Colors
@@ -63,7 +59,7 @@ function SnowDepth(props) {
       forecastSum += precipAccumulation;
       values.push(Math.floor(forecastSum));
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -71,7 +67,6 @@ function SnowDepth(props) {
       if (i !== 0) {
         colors.push(Constants.colors.blue3);
       } else {
-        
         colors.push(Constants.colors.orange)
       }
 
@@ -84,7 +79,7 @@ function SnowDepth(props) {
     });
 
     setData(generateChartData(chartData));
-  }, []);
+  }, [depth, forecast, centerDate]);
 
   return (
     <section className="SnowDepth">

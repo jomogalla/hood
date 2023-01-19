@@ -1,8 +1,6 @@
 import './Temperature.css';
 import React, { useEffect, useState } from "react";
-import AWDB from '../Services/awdb';
-import DarkSky from '../Services/darksky';
-import Constants from '../constants';
+import Constants from '../../constants';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -24,14 +22,12 @@ ChartJS.register(
   Legend
 );
 
-function Temperature(props) {
+function Temperature({ tempMax, tempMin, forecast, centerDate }) {
   const [data, setData] = useState(generateChartData([]));
 
   const options = generateOptions('Temperatures', '\xB0F')
 
-  let { tempMax, tempMin, forecast } = props;
-
-  useEffect(async () => {
+  useEffect(() => {
     let chartData = [];
 
     // Transform AWDB Data to Values, Labels, & Colors
@@ -46,18 +42,15 @@ function Temperature(props) {
       return Constants.colors.blue2;
     });
 
-    let forecastSum = tempMax[tempMax.length - 1].value;
-
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
-      forecastSum += tempDay.precipAccumulation;
       const tempLow = tempDay.temperatureLow;
       const tempHigh = tempDay.temperatureHigh;
 
       values.push([tempLow, tempHigh]);
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -79,7 +72,7 @@ function Temperature(props) {
     });
 
     setData(generateChartData(chartData));
-  }, []);
+  }, [tempMax, tempMin, forecast, centerDate]);
 
   return (
     <section className="Temperature">

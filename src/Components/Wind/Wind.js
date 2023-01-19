@@ -1,6 +1,6 @@
-import './Cloud.css';
+import './Wind.css';
 import React, { useEffect, useState } from "react";
-import Constants from '../constants';
+import Constants from '../../constants';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -22,44 +22,36 @@ ChartJS.register(
   Legend
 );
 
-function Cloud(props) {
+function Wind({ forecast, past, centerDate}) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Cloud Cover', '%')
+  const options = generateOptions('Wind', 'mph')
 
-  let { forecast, past } = props;
-
-  useEffect(async () => {
+  useEffect(() => {
     let chartData = [];
 
     const values = [];
     const labels = [];
     const colors = [];
 
-    const today = new Date();
-
     for(let i = 0; i < past.length; i++) {
       const tempDay = past[i].daily.data[0];
 
-      values.push(tempDay.cloudCover * 100);
+      values.push([tempDay.windSpeed, tempDay.windGust]);
 
-
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
-      const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (Constants.daysToForecast - 1 - i));;
-      const dayFormatted = getFormattedDate(day);
-
-      colors.push(Constants.colors.blue3);
+      colors.push(Constants.colors.blue2);
     }
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
-      values.push(tempDay.cloudCover * 100);
+      values.push([tempDay.windSpeed, tempDay.windGust]);
 
-      const tempDate = new Date();
+      const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
@@ -79,7 +71,7 @@ function Cloud(props) {
     });
 
     setData(generateChartData(chartData));
-  }, []);
+  }, [forecast, past, centerDate]);
 
   return (
     <section className="Wind">
@@ -88,7 +80,7 @@ function Cloud(props) {
   );
 }
 
-export default Cloud;
+export default Wind;
 
 function generateChartData(chartData) {
   if(!chartData.length) {
@@ -107,6 +99,8 @@ function generateChartData(chartData) {
         barPercentage: 1.2,
         data: value.values,
         backgroundColor: value.colors,
+        borderRadius: 50,
+        borderSkipped: false,
       };
     }),
   };
@@ -131,6 +125,7 @@ function generateOptions(title, yUnits) {
       },
     },
     aspectRatio: 1.25,
+    borderRadius: 50,
     animation: {
       duration: 200,
     },
@@ -149,4 +144,5 @@ function generateOptions(title, yUnits) {
       },
     },
   };
+
 }

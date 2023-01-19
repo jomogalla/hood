@@ -31,7 +31,7 @@ function Header({
       </h1>
       <h4>
         {beginDateFormatted} - {endDateFormatted}
-      </h4>
+      </h2>
     </header>
   );
 }
