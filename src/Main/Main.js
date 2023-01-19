@@ -6,6 +6,7 @@ import SnowDepth from '../SnowDepth/SnowDepth';
 import Temperature from '../Temperature/Temperature';
 import Wind from '../Wind/Wind';
 import Cloud from '../Cloud/Cloud';
+import Station from '../Station/Station';
 import Awdb from '../Services/awdb';
 import DarkSky from '../Services/darksky';
 import constants from '../constants';
@@ -108,20 +109,23 @@ function Main({
           </div>
         }
         {!loading &&
-          <div className="charts">
-            { snowDepth.length !== 0 && Object.keys(forecast).length !== 0 && 
-              <SnowDepth forecast={forecast} depth={snowDepth}/>
-            }
-            { tempMax.length !== 0 && tempMin.length !== 0 && Object.keys(forecast).length !== 0 &&
-              <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
-            }
-            { Object.keys(forecast).length !== 0 && past.length !== 0 && 
-              <Wind forecast={forecast} past={past}/>
-            }
-            { Object.keys(forecast).length !==0 && past.length !== 0 &&
-              <Cloud forecast={forecast} past={past}/>
-            }
-          </div>
+          <>
+            <div className="charts">
+              { snowDepth.length !== 0 && Object.keys(forecast).length !== 0 && 
+                <SnowDepth forecast={forecast} depth={snowDepth}/>
+              }
+              { tempMax.length !== 0 && tempMin.length !== 0 && Object.keys(forecast).length !== 0 &&
+                <Temperature forecast={forecast} tempMax={tempMax} tempMin={tempMin}/>
+              }
+              { Object.keys(forecast).length !== 0 && past.length !== 0 && 
+                <Wind forecast={forecast} past={past}/>
+              }
+              { Object.keys(forecast).length !==0 && past.length !== 0 &&
+                <Cloud forecast={forecast} past={past}/>
+              }
+            </div>
+            <Station station={station} />
+          </>
         }
       </main>
     </>

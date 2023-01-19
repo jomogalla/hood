@@ -1,0 +1,17 @@
+.station-wrapper {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.station-wrapper h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.station-info-wrapper {
+  margin-bottom: 10px;
+}
+
+.leaflet-container {
+  height: 300px;
+}
