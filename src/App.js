@@ -1,13 +1,18 @@
 import './App.css';
-import Header from './Layout/Header/Header';
-import Main from './Layout/Main/Main';
-import Footer from './Layout/Footer/Footer';
+import { useState } from 'react';
+import Header from './Header/Header';
+import Main from './Main/Main';
+import Footer from './Footer/Footer';
+
+import { getDefaultStation } from './stations';
 
 function App() {
+  const [selectedStation, setSelectedStation] = useState(getDefaultStation());
+
   return (
     <div className="App">
-      <Header/>
-      <Main />
+      <Header selectedStation={selectedStation} setSelectedStation={setSelectedStation}/>
+      <Main selectedStation={selectedStation}/>
       <Footer /> 
     </div>
   );

@@ -5,3 +5,9 @@
 .Header h1 {
   margin-bottom: 0;
 }
+
+.Header h1 select {
+  border: none;
+  height: auto;
+  text-align: center;
+}

@@ -7,16 +7,16 @@ const params = {
 };
 
 const DarkSky =  {
-    getForecast: async function () {
-        const response = await fetch(`${DARKSKY_AWS_ENDPOINT}/${TIMBERLINE_LATITUDE},${TIMBERLINE_LONGITUDE}?${new URLSearchParams(params)}`)
+    getForecast: async function ({latitude, longitude}) {
+        const response = await fetch(`${DARKSKY_AWS_ENDPOINT}/${latitude},${longitude}?${new URLSearchParams(params)}`)
         const forecast = await response.json();
 
         return forecast;
     },
-    getPast: async function(date) {
+    getPast: async function({date, latitude, longitude}) {
         const time = new Date(date).getTime() / 1000;
 
-        const response = await fetch(`${DARKSKY_AWS_ENDPOINT}/${TIMBERLINE_LATITUDE},${TIMBERLINE_LONGITUDE},${time}?${new URLSearchParams(params)}`);
+        const response = await fetch(`${DARKSKY_AWS_ENDPOINT}/${latitude},${longitude},${time}?${new URLSearchParams(params)}`);
         const forecast = await response.json();
 
         return forecast;
