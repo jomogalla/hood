@@ -1,6 +1,9 @@
 {
   "name": "hood",
   "version": "0.1.0",
+  "engines": {
+    "node": "14.18.0"
+  },
   "private": true,
   "dependencies": {
     "@81c6116a5d579dd4/smooth-contours": "https://api.observablehq.com/@81c6116a5d579dd4/smooth-contours.tgz?v=3",
