@@ -1,13 +1,13 @@
-import constants from '../constants';
-
 const AWDB_JSON_ENDPOINT = 'https://hh45z6zeke.execute-api.us-west-2.amazonaws.com/Prod/';
 
 let cachedResponse = {};
 
 const Awdb =  {
     getData: async function ({ stationTriplets, elementCd, ordinal = 1, duration = 'DAILY', startDate, endDate }) {
-        if(cachedResponse[elementCd]) {
-            return cachedResponse[elementCd];
+        const cacheKey = `${stationTriplets}-${elementCd}-${ordinal}-${duration}-${startDate}-${endDate}`;
+
+        if(cachedResponse[cacheKey]) {
+            return cachedResponse[cacheKey];
         }
 
         const path = 'getData';
@@ -28,7 +28,7 @@ const Awdb =  {
         
         const transformedResponse = transformResponse(snowData);
 
-        cachedResponse[elementCd] = transformedResponse;
+        cachedResponse[cacheKey] = transformedResponse;
 
         return transformedResponse;
     },
