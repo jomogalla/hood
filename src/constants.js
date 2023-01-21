@@ -3,7 +3,8 @@ const constants = {
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     queryParamKeys: {
-        station: 'station',
+        stationName: 'stationName',
+        stationTriplet: 'stationTriplet',
     },
     colors: {
         grey: '#BCB1AD',
