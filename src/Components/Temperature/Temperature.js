@@ -1,6 +1,7 @@
 import './Temperature.css';
 import React, { useEffect, useState } from "react";
 import Constants from '../../constants';
+import { getFormattedDate } from '../../utils';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -25,7 +26,7 @@ ChartJS.register(
 function Temperature({ tempMax, tempMin, forecast, centerDate }) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Temperatures', '\xB0F')
+  const options = generateOptions('\xB0F')
 
   useEffect(() => {
     let chartData = [];
@@ -39,7 +40,7 @@ function Temperature({ tempMax, tempMin, forecast, centerDate }) {
     const colors = tempMax.map((dataPoint) => { 
       if(dataPoint.value > 32) return Constants.colors.red;
  
-      return Constants.colors.blue2;
+      return Constants.colors.orange2;
     });
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
@@ -76,6 +77,7 @@ function Temperature({ tempMax, tempMin, forecast, centerDate }) {
 
   return (
     <section className="Temperature">
+      <h2>Temperature</h2>
       <Bar data={data} options={options}/>
     </section>
   );
@@ -97,7 +99,7 @@ function generateChartData(chartData) {
       return {
         stack: index,
         labels: value.labels,
-        barPercentage: 1.2,
+        barPercentage: 0.66,
         data: value.values,
         backgroundColor: value.colors,
         borderRadius: 50,
@@ -110,11 +112,7 @@ function generateChartData(chartData) {
   return chart;
 }
 
-function getFormattedDate(date) {
-  return `${Constants.days[date.getDay()]} ${date.getDate()}`;
-}
-
-function generateOptions(title, yUnits) {
+function generateOptions(yUnits) {
   return {
     responsive: true,
     plugins: {
@@ -122,8 +120,7 @@ function generateOptions(title, yUnits) {
         display: false,
       },
       title: {
-        display: true,
-        text: title,
+        display: false,
       },
     },
     borderRadius: 50,
@@ -132,6 +129,13 @@ function generateOptions(title, yUnits) {
       duration: 200,
     },
     scales: {
+      x: {
+        ticks: {
+          font: {
+            family: 'Courier',
+          },
+        },
+      },
       y: {
         beginAtZero: false,
         ticks: {
@@ -142,6 +146,9 @@ function generateOptions(title, yUnits) {
             }
 
             return  `${value}${yUnits}`;
+          },
+          font: {
+            family: 'Courier',
           },
         },
         grid: {

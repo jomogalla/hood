@@ -1,14 +1,25 @@
 .Main {
-  text-align: center;
   padding: 10px;
 }
 
 .charts {
   display: flex;
   flex-wrap: wrap;
+  gap: 40px;
   justify-content: space-between;
+  padding: 20px;
 }
 
+.station {
+  padding: 20px;
+}
+
+@media screen and (max-width: 720px) {
+  .station,
+  .charts {
+    padding: 20px;
+  }
+}
 
 
 .Main section {
@@ -18,12 +29,17 @@
 
 @media screen and (min-width: 720px) {
   .Main section {
-    max-width: 48%;
+    max-width: calc(50% - 20px);;
   }
 }
 
 .loader {
+  left: 50%;
   margin-top: 100px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .message {

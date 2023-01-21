@@ -1,6 +1,7 @@
 import './Wind.css';
 import React, { useEffect, useState } from "react";
 import Constants from '../../constants';
+import { getFormattedDate } from '../../utils';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -25,7 +26,7 @@ ChartJS.register(
 function Wind({ forecast, past, centerDate}) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Wind', 'mph')
+  const options = generateOptions('mph')
 
   useEffect(() => {
     let chartData = [];
@@ -43,7 +44,7 @@ function Wind({ forecast, past, centerDate}) {
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
 
-      colors.push(Constants.colors.blue2);
+      colors.push(Constants.colors.orange2);
     }
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
@@ -75,6 +76,7 @@ function Wind({ forecast, past, centerDate}) {
 
   return (
     <section className="Wind">
+      <h2>Windspeed</h2>
       <Bar data={data} options={options}/>
     </section>
   );
@@ -96,7 +98,7 @@ function generateChartData(chartData) {
       return {
         stack: index,
         labels: value.labels,
-        barPercentage: 1.2,
+        barPercentage: 0.66,
         data: value.values,
         backgroundColor: value.colors,
         borderRadius: 50,
@@ -108,11 +110,7 @@ function generateChartData(chartData) {
   return chart;
 }
 
-function getFormattedDate(date) {
-  return `${Constants.days[date.getDay()]} ${date.getDate()}`;
-}
-
-function generateOptions(title, yUnits) {
+function generateOptions(yUnits) {
   return {
     responsive: true,
     plugins: {
@@ -120,8 +118,7 @@ function generateOptions(title, yUnits) {
         display: false,
       },
       title: {
-        display: true,
-        text: title,
+        display: false,
       },
     },
     aspectRatio: 1.25,
@@ -130,6 +127,13 @@ function generateOptions(title, yUnits) {
       duration: 200,
     },
     scales: {
+      x: {
+        ticks: {
+          font: {
+            family: 'Courier',
+          },
+        },
+      },
       y: {
         beginAtZero: true,
         ticks: {
@@ -139,6 +143,9 @@ function generateOptions(title, yUnits) {
             }
 
             return  `${value}${yUnits}`;
+          },
+          font: {
+            family: 'Courier',
           },
         },
       },
