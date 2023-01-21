@@ -20,6 +20,7 @@
 }
 
 .selector-wrapper .icon-wrapper {
+  pointer-events: none;
   position: absolute;
   right: 0;
   top: 50%;
