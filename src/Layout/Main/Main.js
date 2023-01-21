@@ -124,7 +124,9 @@ function Main({
                 <Cloud forecast={forecast} past={past}/>
               }
             </div>
-            <Station station={station} />
+            <div className="station">
+              <Station station={station} />
+            </div>
           </>
         }
       </main>

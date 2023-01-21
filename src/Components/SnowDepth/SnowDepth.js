@@ -2,6 +2,7 @@ import './SnowDepth.css';
 import React, { useEffect, useState } from "react";
 import Constants from '../../constants';
 import _ from "lodash";
+import { getFormattedDate } from '../../utils';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,7 +26,7 @@ ChartJS.register(
 function SnowDepth({ depth, forecast, centerDate}) {
   const [data, setData] = useState(generateChartData([]));
 
-  const options = generateOptions('Snow Depth', '"')
+  const options = generateOptions('"')
 
   useEffect(() => {
     let chartData = [];
@@ -36,7 +37,7 @@ function SnowDepth({ depth, forecast, centerDate}) {
       prev.push(getFormattedDate(value.date));
       return prev;
     }, []);
-    const colors = depth.map(() => { return Constants.colors.grey });
+    const colors = depth.map(() => { return Constants.colors.orange2 });
 
     let forecastSum = depth[depth.length - 1].value;
 
@@ -49,7 +50,6 @@ function SnowDepth({ depth, forecast, centerDate}) {
     // Only what the forecast for the end of the day is + currentSnowLevel
 
     // Sum up all the forecasts and add them to the array
-    // console.log('ENTER DANGER ZONE')
 
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
@@ -83,6 +83,7 @@ function SnowDepth({ depth, forecast, centerDate}) {
 
   return (
     <section className="SnowDepth">
+      <h2>Snow Depth</h2>
       <Bar data={data} options={options}/>
     </section>
   );
@@ -104,7 +105,7 @@ function generateChartData(chartData) {
       return {
         stack: index,
         labels: value.labels,
-        barPercentage: 1.2,
+        barPercentage: 1,
         data: value.values,
         backgroundColor: value.colors,
       };
@@ -114,11 +115,7 @@ function generateChartData(chartData) {
   return chart;
 }
 
-function getFormattedDate(date) {
-  return `${Constants.days[date.getDay()]} ${date.getDate()}`;
-}
-
-function generateOptions(title, yUnits) {
+function generateOptions(yUnits) {
   return {
     responsive: true,
     plugins: {
@@ -126,15 +123,24 @@ function generateOptions(title, yUnits) {
         display: false,
       },
       title: {
-        display: true,
-        text: title,
+        display: false,
       },
     },
     aspectRatio: 1.25,
     animation: {
-      duration: 200,
+      duration: 100,
     },
     scales: {
+      x: {
+        grid: {
+          drawBorder: true,
+        },
+        ticks: {
+          font: {
+            family: 'Courier',
+          },
+        },
+      },
       y: {
         beginAtZero: false,
         ticks: {
@@ -145,6 +151,9 @@ function generateOptions(title, yUnits) {
             }
 
             return  `${value}${yUnits}`;
+          },
+          font: {
+            family: 'Courier',
           },
         },
       },

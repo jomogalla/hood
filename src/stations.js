@@ -34,3 +34,14 @@ export const stations = [
 export const getDefaultStation = () => {
     return stations.find((station) => station.default)
 }
+
+export const getStation = ({ stationName, stationTriplet }) => {
+
+    if(stationName) {
+        return stations.find((station) => station.name === stationName);
+    }
+
+    if(stationTriplet) {
+        return stations.find((station) => station.triplet === stationTriplet);
+    }
+}

@@ -2,6 +2,9 @@ const constants = {
     daysToForecast: 8,
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    queryParamKeys: {
+        station: 'station',
+    },
     colors: {
         grey: '#BCB1AD',
         green: '#999980',
@@ -13,6 +16,7 @@ const constants = {
         blue2: '#69828C',
         blue3: '#E2DFE6',
         orange: '#DE9681',
+        orange2: '#edc6bb',
     },
 }
 

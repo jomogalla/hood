@@ -17,18 +17,20 @@ function Header({
   const updateStation = (e) => {
     const station = stations.find((station) => station.triplet === e.target.value);
     setSelectedStation(station);
+    window.history.replaceState(null, null, `?${constants.queryParamKeys.station}=${station.name}` );
   }
 
   return (
     <header className="Header">
       <h1>
-        <select onChange={updateStation} value={selectedStation.triplet}>
-          <option value="">Select a station</option>
-          {stations.map((station) => (
-            <option value={station.triplet} key={station.triplet}>{station.name}</option>
-          ))}
-        </select>
+        <span className='accessibility-text'>{selectedStation.name}</span>
       </h1>
+      <select className="station-selector" onChange={updateStation} value={selectedStation.triplet}>
+        <option value="">Select a station</option>
+        {stations.map((station) => (
+          <option value={station.triplet} key={station.triplet}>{station.name}</option>
+        ))}
+      </select>
       <h4>
         {beginDateFormatted} - {endDateFormatted}
       </h4>
@@ -39,5 +41,5 @@ function Header({
 export default Header;
 
 function formatDate(datey) {
-  return `${datey.getMonth() + 1}/${datey.getDate()}/${datey.getFullYear()}`;
+  return `${datey.getMonth() + 1}/${datey.getDate()}/${datey.getFullYear().toString().substr(-2)}`;
 }
