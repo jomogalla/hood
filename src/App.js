@@ -13,16 +13,13 @@ function App() {
   useEffect(() =>{
     // Setting Station from query params
     const queryParams = new URLSearchParams(window.location.search);
-    const stationName = queryParams.get(constants.queryParamKeys.station);
+    const stationName = queryParams.get(constants.queryParamKeys.stationName);
+    const stationTriplet = queryParams.get(constants.queryParamKeys.stationTriplet);
   
-    if(stationName) {
-      const selectedStation = getStation({ stationName})
+    const selectedStation = getStation({ stationName, stationTriplet })
 
-      if(selectedStation) {
-        setSelectedStation(selectedStation)
-      } else {
-        setSelectedStation(getDefaultStation());
-      }
+    if(selectedStation) {
+      setSelectedStation(selectedStation)
     } else {
       setSelectedStation(getDefaultStation());
     }

@@ -15,20 +15,33 @@
   position: absolute;
 }
 
+.selector-wrapper {
+  position: relative;
+}
+
+.selector-wrapper .icon-wrapper {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.selector-wrapper .icon {
+  height: 32px;
+}
+
 .station-selector {
-  border: none;
-  border-bottom: 2px solid black;
+  -webkit-appearance: none;
+  border: none !important;
+  border-bottom: 2px solid black !important;
   border-radius: 0;
   cursor: pointer;
   font-size: 48px;
   height: auto;
+  line-height: 1.2;
   margin-bottom: 0;
   max-width: 100%;
   transition: all 0.15s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   padding: 0;
   width: 100%;
-}
-
-.station-selector:hover {
-  font-style: italic;
 }

@@ -17,7 +17,7 @@ function Header({
   const updateStation = (e) => {
     const station = stations.find((station) => station.triplet === e.target.value);
     setSelectedStation(station);
-    window.history.replaceState(null, null, `?${constants.queryParamKeys.station}=${station.name}` );
+    window.history.replaceState(null, null, `?${constants.queryParamKeys.stationName}=${station.name}` );
   }
 
   return (
@@ -25,12 +25,17 @@ function Header({
       <h1>
         <span className='accessibility-text'>{selectedStation.name}</span>
       </h1>
-      <select className="station-selector" onChange={updateStation} value={selectedStation.triplet}>
-        <option value="">Select a station</option>
-        {stations.map((station) => (
-          <option value={station.triplet} key={station.triplet}>{station.name}</option>
-        ))}
-      </select>
+      <div className="selector-wrapper">
+        <select className="station-selector" onChange={updateStation} value={selectedStation.triplet}>
+          <option value="">Select a station</option>
+          {stations.map((station) => (
+            <option value={station.triplet} key={station.triplet}>{station.name}</option>
+          ))}
+        </select>
+        <div className="icon-wrapper">
+          <img className="icon" src="/location-dot-solid.svg" alt="select a station"/>
+        </div>
+      </div>
       <h4>
         {beginDateFormatted} - {endDateFormatted}
       </h4>
