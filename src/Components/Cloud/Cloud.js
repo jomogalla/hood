@@ -98,9 +98,12 @@ function generateChartData(chartData) {
       return {
         stack: index,
         labels: value.labels,
-        barPercentage: 1.2,
+        barPercentage: 1.3,
         data: value.values,
         backgroundColor: value.colors,
+        borderColor: Constants.colors.orange,
+        borderRadius: 50,
+        borderWidth: 1,
       };
     }),
   };
