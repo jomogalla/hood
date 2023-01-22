@@ -25,11 +25,17 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+  transition: all ease-in-out 0.15s;
+}
+
+.selector-wrapper:hover .icon-wrapper {
+  transform: scale(0.95) translateY(-47.5%);
 }
 
 .selector-wrapper .icon {
   height: 32px;
 }
+
 
 .station-selector {
   -webkit-appearance: none;

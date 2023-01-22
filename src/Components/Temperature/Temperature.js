@@ -1,7 +1,7 @@
 import './Temperature.css';
 import React, { useEffect, useState } from "react";
 import Constants from '../../constants';
-import { getFormattedDate } from '../../utils';
+import { getFormattedDate, generateStripes } from '../../utils';
 import _ from "lodash";
 import {
   Chart as ChartJS,
@@ -32,13 +32,32 @@ function Temperature({ tempMax, tempMin, forecast, centerDate }) {
     let chartData = [];
 
     // Transform AWDB Data to Values, Labels, & Colors
-    const values = tempMax.map((value, index) => [tempMin[index].value, value.value]); // this is gross
+
+    const values = [];
+    const additionalValues = [];
+    const freezing = 32;
+    for(let i = 0; i < Math.min(tempMax.length, tempMin.length); i++) {
+
+      if(tempMax[i].value > freezing) {
+        const difference = tempMax[i].value - freezing;
+
+        values.push([tempMin[i].value, freezing])
+        additionalValues.push([0, difference]);
+      } else {
+        values.push([tempMin[i].value, tempMax[i].value])
+        additionalValues.push(undefined);
+      }
+    }
+
     const labels = tempMax.reduce((prev, value) => {
       prev.push(getFormattedDate(value.date));
       return prev;
     }, []);
+    const additionalLabels = [...labels];
+    const additionalColors = [];
+
     const colors = tempMax.map((dataPoint) => { 
-      if(dataPoint.value > 32) return Constants.colors.red;
+      additionalColors.push(generateStripes(Constants.colors.red2))
  
       return Constants.colors.orange2;
     });
@@ -49,21 +68,38 @@ function Temperature({ tempMax, tempMin, forecast, centerDate }) {
       const tempLow = tempDay.temperatureLow;
       const tempHigh = tempDay.temperatureHigh;
 
-      values.push([tempLow, tempHigh]);
+      if(tempHigh > freezing ) {
+        if(tempLow > freezing) {
+          const difference = tempHigh - freezing;
+
+          values.push([0, 0])
+          additionalValues.push([tempLow, tempHigh]); // This makes the chart values bad....
+        } else {
+          const difference = tempHigh - freezing;
+
+          values.push([tempLow, freezing])
+          additionalValues.push([0, difference]); // This makes the chart values bad....
+        }
+
+      }
+      else {
+        values.push([tempLow, tempHigh])
+        additionalValues.push(undefined);
+      }
 
       const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
+      additionalLabels.push(getFormattedDate(tempDate));
 
       // Make today orange
       if (i === 0) {
         colors.push(Constants.colors.orange);
-      } else if (tempHigh > 32) {
-        colors.push(Constants.colors.red);
       } else {
         colors.push(Constants.colors.blue3)
       }
 
+      additionalColors.push(Constants.colors.red2);
     }
 
     chartData.push({
@@ -72,7 +108,15 @@ function Temperature({ tempMax, tempMin, forecast, centerDate }) {
       colors,
     });
 
-    setData(generateChartData(chartData));
+    chartData.push({
+      values: additionalValues,
+      labels: additionalLabels,
+      colors: additionalColors,
+    });
+
+    const chartz = generateChartData(chartData);
+
+    setData(chartz);
   }, [tempMax, tempMin, forecast, centerDate]);
 
   return (
@@ -102,9 +146,24 @@ function generateChartData(chartData) {
         barPercentage: 0.66,
         data: value.values,
         backgroundColor: value.colors,
-        borderRadius: 50,
         borderSkipped: false,
+        stack: 'Stack 0',
+        borderRadius: value.values.map((value) => {
+          if(!value) {
+            return 0;
+          }
+          const [tempLow, tempHigh] = value;
 
+          if(tempHigh === Constants.freezing) {
+            return { topLeft: 0, topRight: 0, bottomLeft: 50, bottomRight: 50 };
+          }
+
+          if(tempLow === 0) {
+            return { topLeft: 50, topRight: 50, bottomLeft: 0, bottomRight: 0 };
+          }
+
+          return 50;
+        }),
       };
     }),
   };
@@ -123,7 +182,6 @@ function generateOptions(yUnits) {
         display: false,
       },
     },
-    borderRadius: 50,
     aspectRatio: 1.25,
     animation: {
       duration: 200,
@@ -138,6 +196,7 @@ function generateOptions(yUnits) {
       },
       y: {
         beginAtZero: false,
+        stack: true,
         ticks: {
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {

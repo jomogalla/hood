@@ -2,7 +2,8 @@ import './SnowDepth.css';
 import React, { useEffect, useState } from "react";
 import Constants from '../../constants';
 import _ from "lodash";
-import { getFormattedDate } from '../../utils';
+import { getFormattedDate, generateStripes } from '../../utils';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,12 +40,20 @@ function SnowDepth({ depth, forecast, centerDate}) {
     }, []);
     const colors = depth.map(() => { return Constants.colors.orange2 });
 
+    // Get the current amount of snow
     let forecastSum = depth[depth.length - 1].value;
 
-    // Remove the values for today from our arrays
-    values.pop();
-    labels.pop();
-    colors.pop();
+    // Handling a case when the API fails to return today......
+    if(values.length === Constants.daysToForecast) {
+      values.pop();
+      labels.pop();
+      colors.pop();
+    }
+
+    // Duplicate the arrays for the stacked bar chart
+    const additionalValues = values.map(() => 0);
+    const additionalLabels = [...labels];
+    const addiontalColors = [...colors];
 
     // We are currently not showing todays snow level
     // Only what the forecast for the end of the day is + currentSnowLevel
@@ -54,22 +63,32 @@ function SnowDepth({ depth, forecast, centerDate}) {
     for (let i = 0; i < Constants.daysToForecast; i++) {
       const tempDay = forecast.daily.data[i];
 
+      // Get the days forecasted precipition
       let precipAccumulation = tempDay.precipAccumulation ? tempDay.precipAccumulation : 0;
 
-      forecastSum += precipAccumulation;
-      values.push(Math.floor(forecastSum));
+      // Push the current snow depth
+      values.push(forecastSum);
 
+      // Push the forecasted snow accumulation
+      additionalValues.push(precipAccumulation);
+
+      // Add forecasted to current snow depth
+      forecastSum += precipAccumulation;
+      
+      // Get and push the time
       const tempDate = new Date(centerDate);
       tempDate.setTime(tempDay.time * 1000);
       labels.push(getFormattedDate(tempDate));
+      additionalLabels.push(getFormattedDate(tempDate));
 
       // Make today orange
       if (i !== 0) {
         colors.push(Constants.colors.blue3);
+        addiontalColors.push(generateStripes(Constants.colors.blue));
       } else {
-        colors.push(Constants.colors.orange)
+        colors.push(Constants.colors.orange);
+        addiontalColors.push(generateStripes(Constants.colors.orange));
       }
-
     }
 
     chartData.push({
@@ -77,8 +96,15 @@ function SnowDepth({ depth, forecast, centerDate}) {
       labels,
       colors,
     });
+    chartData.push({
+      values: additionalValues,
+      labels: additionalLabels,
+      colors: addiontalColors,
+    });
 
-    setData(generateChartData(chartData));
+    const generatedChartData = generateChartData(chartData);
+
+    setData(generatedChartData);
   }, [depth, forecast, centerDate]);
 
   return (
@@ -108,6 +134,7 @@ function generateChartData(chartData) {
         barPercentage: 1,
         data: value.values,
         backgroundColor: value.colors,
+        stack: 'Stack 0',
       };
     }),
   };
@@ -143,6 +170,7 @@ function generateOptions(yUnits) {
       },
       y: {
         beginAtZero: false,
+        stacked: true,
         ticks: {
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
@@ -159,5 +187,4 @@ function generateOptions(yUnits) {
       },
     },
   };
-
 }

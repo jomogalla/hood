@@ -10,6 +10,8 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 function Station({
   station,
 }) {
+  const [ stationNumber ] = station?.stationTriplet?.split(':');
+
   return (
     <div className="station-wrapper">
       <h2>Station Information</h2>
@@ -22,6 +24,12 @@ function Station({
         </div>
         <div className="station-info">
           <strong>Elevation:</strong> {station.elevation}ft
+        </div>
+        <div className="station-info">
+          <strong>Snotel Station:</strong> <a target="_blank" href={`https://wcc.sc.egov.usda.gov/nwcc/site?sitenum=${stationNumber}`}>{stationNumber}</a>
+        </div>
+        <div className="station-info">
+          <strong>Forecast:</strong> <a target="_blank" href={`https://forecast.weather.gov/MapClick.php?lat=${station.latitude}&lon=${station.longitude}`}>NOAA</a>
         </div>
       </div>
       <div className="map-wrapper">

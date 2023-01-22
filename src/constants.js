@@ -1,5 +1,6 @@
 const constants = {
     daysToForecast: 8,
+    freezing: 32,
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     queryParamKeys: {
@@ -9,7 +10,9 @@ const constants = {
     colors: {
         grey: '#BCB1AD',
         green: '#999980',
+        green2: '#b4daba',
         red: '#91505F',
+        red2: '#c3929e',
         black: '#242629',
         white: '#FFFEFC',
         tan: '#AE9581',
